@@ -53,10 +53,41 @@ wifiConnection.registerWifiStatusListener(new WifiConnectionListener() {
     public void onLocationServiceOff() {
       /*
       In order to connect to wifi, device location service should be ON.
-      In case it is not turned on and you are calling connectToWifi method of wifiConnection class,
+      In case it is not turned on and you are calling connectToWifi method of WifiConnection class,
       this callback will be called.
       */
     }
 });
 wifiConnection.connectToWifi("Your_Wifi_SSID","Your Wifi Password");
 ```
+
+### Getting Wifi Scan Results 
+
+```Java
+WifiConnection wifiConnection = WifiConnection.getInstance(this);
+wifiConnection.registerWifiScanListener(new WifiScanListener() {
+    @Override
+    public void onWifiScanList(List<ScanResult> scanResultList) {
+     /*
+       Once you call getWifiScanList method, this callback will be called giving wifi scan result.
+     */
+    }
+
+    @Override
+    public void onLocationServiceOff() {
+     /*
+      In order to get wifi scan result, device location service should be ON.
+      In case it is not turned on and you are calling getWifiScanList method of WifiConnection class,
+      this callback will be called.
+     */
+    }
+
+    @Override
+    public void onError(WIFI_SCAN_ERROR wifi_scan_error) {
+     //If any error occurs while getting wifi scan result then this callback will be called.
+    }
+});
+wifiConnection.getWifiScanList();
+```
+
+
