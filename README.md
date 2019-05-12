@@ -89,5 +89,74 @@ wifiConnection.registerWifiScanListener(new WifiScanListener() {
 });
 wifiConnection.getWifiScanList();
 ```
+### Connecting to Wifi and Socket Server 
+
+```Java
+/*
+...
+...
+*/
+private ClientSocketService mClientSocketService;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    /*
+    ...
+    ...
+    */
+    Intent intent=new Intent();
+    startService(intent);
+    final ClientSocketServiceListener clientSocketServiceListener=new ClientSocketServiceListener() {
+        @Override
+        public void onConnected(String ssid, String clientIpAddress, int port) {
+    
+        }
+    
+        @Override
+        public void onWifiConnecting(String ssid) {
+    
+        }
+    
+        @Override
+        public void onSocketConnecting(String clientIpAddress, int port) {
+    
+        }
+    
+        @Override
+        public void onDataReceived(ByteBuffer dataBuffer, String data) {
+    
+        }
+    
+        @Override
+        public void onDisconnected() {
+    
+        }
+    
+        @Override
+        public void onError(ERRORS socket_error) {
+    
+        }
+    };
+    
+    ServiceConnection mServiceConnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClientSocketService.ClientSocketServiceBinder myBinder = (ClientSocketService.ClientSocketServiceBinder) service;
+            mClientSocketService = myBinder.getService();
+            mClientSocketService.registerClientSocketServiceStatus(clientSocketServiceListener);
+            
+            //Connecting to Wifi and socket running on 192.168.0.11 IP and 8082 port.
+            mClientSocketService.connect("MyWifiSSID","Password","192.168.0.11",8082);
+        }
+    
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mClientSocketService.unRegisterClientSocketServiceStatus();
+        }
+    };
+    bindService(intent,mServiceConnection, BIND_AUTO_CREATE);
+
+}
+```
 
 
